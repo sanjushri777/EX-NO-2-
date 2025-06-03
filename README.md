@@ -29,7 +29,7 @@ STEP-5: Display the obtained cipher text.
 
 
 
-Program:
+## Program:
 ```C
 #include <stdio.h>
 #include <stdlib.h>
@@ -171,7 +171,7 @@ int main() {
 
 
 
-Output:
+## Output:
 
 
 ![image](https://github.com/user-attachments/assets/edff1194-5088-4fa1-84d3-6f65176df12d)
