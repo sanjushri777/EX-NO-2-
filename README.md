@@ -176,6 +176,6 @@ Output:
 
 ![image](https://github.com/user-attachments/assets/edff1194-5088-4fa1-84d3-6f65176df12d)
 
-
-##RESULT:
-  Thus, the implementation of playful cipher executed successfully.
+## RESULT:
+  
+Thus, the implementation of playful cipher executed successfully.
