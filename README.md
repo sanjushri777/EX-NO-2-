@@ -1,13 +1,8 @@
 ## EX. NO:2 IMPLEMENTATION OF PLAYFAIR CIPHER
 
+ ## AIM:
  
-
-## AIM:
- 
-
- 
-
-To write a C program to implement the Playfair Substitution technique.
+ To write a C program to implement the Playfair Substitution technique.
 
 ## DESCRIPTION:
 
@@ -35,9 +30,152 @@ STEP-5: Display the obtained cipher text.
 
 
 Program:
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define SIZE 30
+
+// Convert characters to lowercase
+void toLowerCase(char plain[], int ps) {
+    for (int i = 0; i < ps; i++) {
+        if (plain[i] >= 'A' && plain[i] <= 'Z') {
+            plain[i] += 32;
+        }
+    }
+}
+
+// Remove spaces from the string
+int removeSpaces(char* plain, int ps) {
+    int i, count = 0;
+    for (i = 0; i < ps; i++) {
+        if (plain[i] != ' ')
+            plain[count++] = plain[i];
+    }
+    plain[count] = '\0';
+    return count;
+}
+
+// Generate key table
+void generateKeyTable(char key[], int ks, char keyT[5][5]) {
+    int dicty[26] = {0}, i, j, k;
+    dicty['j' - 'a'] = 1;
+    for (i = 0; i < ks; i++) {
+        if (key[i] != 'j')
+            dicty[key[i] - 'a'] = 2;
+    }
+
+    i = 0; j = 0;
+    for (k = 0; k < ks; k++) {
+        if (dicty[key[k] - 'a'] == 2) {
+            dicty[key[k] - 'a'] -= 1;
+            keyT[i][j++] = key[k];
+            if (j == 5) { i++; j = 0; }
+        }
+    }
+
+    for (k = 0; k < 26; k++) {
+        if (dicty[k] == 0) {
+            keyT[i][j++] = (char)(k + 'a');
+            if (j == 5) { i++; j = 0; }
+        }
+    }
+}
+
+// Search letters in key table
+void search(char keyT[5][5], char a, char b, int arr[]) {
+    if (a == 'j') a = 'i';
+    if (b == 'j') b = 'i';
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            if (keyT[i][j] == a) {
+                arr[0] = i;
+                arr[1] = j;
+            } else if (keyT[i][j] == b) {
+                arr[2] = i;
+                arr[3] = j;
+            }
+        }
+    }
+}
+
+int mod5(int a) {
+    return (a % 5);
+}
+
+// Make sure length is even
+int prepare(char str[], int len) {
+    if (len % 2 != 0) {
+        str[len++] = 'z';
+        str[len] = '\0';
+    }
+    return len;
+}
+
+// Encrypt using Playfair rules
+void encrypt(char str[], char keyT[5][5], int ps) {
+    int i, a[4];
+    for (i = 0; i < ps; i += 2) {
+        search(keyT, str[i], str[i + 1], a);
+        if (a[0] == a[2]) {
+            str[i] = keyT[a[0]][mod5(a[1] + 1)];
+            str[i + 1] = keyT[a[0]][mod5(a[3] + 1)];
+        } else if (a[1] == a[3]) {
+            str[i] = keyT[mod5(a[0] + 1)][a[1]];
+            str[i + 1] = keyT[mod5(a[2] + 1)][a[1]];
+        } else {
+            str[i] = keyT[a[0]][a[3]];
+            str[i + 1] = keyT[a[2]][a[1]];
+        }
+    }
+}
+
+// Encrypt using Playfair Cipher
+void encryptByPlayfairCipher(char str[], char key[]) {
+    int ps, ks;
+    char keyT[5][5];
+
+    ks = strlen(key);
+    ks = removeSpaces(key, ks);
+    toLowerCase(key, ks);
+
+    ps = strlen(str);
+    toLowerCase(str, ps);
+    ps = removeSpaces(str, ps);
+    ps = prepare(str, ps);
+
+    generateKeyTable(key, ks, keyT);
+    encrypt(str, keyT, ps);
+}
+
+// Driver code
+int main() {
+    char str[SIZE], key[SIZE];
+    
+    strcpy(key, "Monarchy");
+    printf("Key text: %s\n", key);
+
+    strcpy(str, "instruments");
+    printf("Plain text: %s\n", str);
+
+    encryptByPlayfairCipher(str, key);
+    printf("Cipher text: %s\n", str);
+
+    return 0;
+}
+```
+
 
 
 
 
 
 Output:
+
+
+![image](https://github.com/user-attachments/assets/edff1194-5088-4fa1-84d3-6f65176df12d)
+
+
+##RESULT:
+  Thus, the implementation of playful cipher executed successfully.
